@@ -1,0 +1,1637 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Installation Partner API",
+    "description": "This API is designed to provide installation partners of homeQgo with access to the quotes that customers of homeQgo have accepted and are assigned to \nthem as an installation partner. Installers typically refer to these quotes as leads. Installers can fetch their quotes via this API and automatically insert them into \ntheir system. Soon, this API will be extended with endpoints where installers can send status updates on the quotes they have received. The API is designed to follow \nthe JSONAPI specifications. More information about this can be found at https://www.jsonapi.net/usage/reading/filtering.html Note: If you are having trouble fetching \nor updating quotes, reach out to your contact person at homeQgo to ensure that your settings for the Developer Portal are correct and that you have an active subscription.\nNote: All datetime fields that are both fetched from this API and posted to this API are in in UTC.",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/installer/quote/{id}/status/installed": {
+      "post": {
+        "tags": [
+          "Installers"
+        ],
+        "summary": "Set quote status installed",
+        "description": "Via this endpoint, the status of a specific quote can be updated to ‘Installed’ using its unique 'id'. Installation partners typically refer to these quotes as leads.\r\nAn installation partner can only update quotes that are assigned to them. Please check the required parameter(s) listed below to make a successful call.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the quote to be updated.",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "header",
+            "description": "The requested API version",
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "default": "1.0"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A JSON request body containing data to support the status update (see TheSustainables.PartnerApi.Web.Dtos.QuoteInstalledRequest).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteInstalledRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteInstalledRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteInstalledRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstallerQuoteStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/installer/quote/{id}/status/rejected-by-installer": {
+      "post": {
+        "tags": [
+          "Installers"
+        ],
+        "summary": "Set quote status rejected",
+        "description": "Via this endpoint, the status of a specific quote can be updated to ‘Rejected by installer’ using its unique 'id'.\r\nInstallation partners typically refer to these quotes as leads. An installation partner can only update quotes that are assigned to them. Please check the required parameter(s) listed below to make a successful call.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the quote to be updated.",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "header",
+            "description": "The requested API version",
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "default": "1.0"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A JSON request body containing data to support the status update (see TheSustainables.PartnerApi.Web.Dtos.QuoteRejectedRequest).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteRejectedRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteRejectedRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteRejectedRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstallerQuote"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/installer/quote/{id}/status/quote-accepted-at-installer": {
+      "post": {
+        "tags": [
+          "Installers"
+        ],
+        "summary": "Set quote status accepted at installer",
+        "description": "Via this endpoint, the status of a specific quote can be updated to ‘Accepted at Installer’ using its unique 'id'.\r\nInstallation partners typically refer to these quotes as leads. An installation partner can only update quotes that are assigned to them. Please check the required parameter(s) listed below to make a successful call.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the quote to be updated.",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "header",
+            "description": "The requested API version",
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "default": "1.0"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A JSON request body containing data to support the status update (see TheSustainables.PartnerApi.Web.Dtos.QuoteAcceptedAtInstallerRequest).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteAcceptedAtInstallerRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteAcceptedAtInstallerRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteAcceptedAtInstallerRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstallerQuote"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/installer/quote/{id}/status/quote-installation-planned": {
+      "post": {
+        "tags": [
+          "Installers"
+        ],
+        "summary": "Set quote status installation planned",
+        "description": "Via this endpoint, the status of a specific quote can be updated to ‘Installation Planned’ using its unique 'id'.\r\nInstallation partners typically refer to these quotes as leads. An installation partner can only update quotes that are assigned to them. Please check the required parameter(s) listed below to make a successful call.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the quote to be updated.",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "header",
+            "description": "The requested API version",
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "default": "1.0"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A JSON request body containing data to support the status update (see TheSustainables.PartnerApi.Web.Dtos.InstallationPlannedRequest).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InstallationPlannedRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InstallationPlannedRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/InstallationPlannedRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstallerQuote"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/quotes/{id}": {
+      "get": {
+        "tags": [
+          "QuoteDtos"
+        ],
+        "summary": "Retrieve quote by id",
+        "description": "Via this endpoint, a specific quote can be fetched using its unique 'id'. Installation partners typically refer to these quotes as leads.\r\nAn installation partner can only request quotes that are assigned to them. Please check the required parameter(s) listed below to make a successful call.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "header",
+            "description": "The requested API version",
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "default": "1.0"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/quotes": {
+      "get": {
+        "tags": [
+          "QuoteDtos"
+        ],
+        "summary": "Retrieve quotes",
+        "description": "   Via this endpoint, a paginated list of accepted quotes can be fetched. Installation partners typically refer to these quotes as leads.An installation partner can only request quotes that are assigned to them.\r\n   API calls can be specified to fetch only the new quotes using the correct parameters. A suggestion for this is to make API calls at frequent intervals while adding parameters to filter and sort on the property ‘acceptedAt’. This date-time property is the moment that the quote was accepted and becomes available for the installer to follow up.\r\n   Parameter for filtering on accepted date\r\n   -\tName: filter\r\n   -\tValue: greaterThan(acceptedAt,'2023-10-02T12:00:00') (date-time format yyyy-mm-ddTHH:MM:SS)\r\nParameter for sorting on accepted date(desc)\r\n   -\tName: sort\r\n   -\tValue: -acceptedAt(the - sorts descending, without the - the sort is ascending)",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "header",
+            "description": "The requested API version",
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "default": "1.0"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuoteDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/photos/{id}": {
+      "get": {
+        "tags": [
+          "QuotePhotos"
+        ],
+        "summary": "Download photo",
+        "description": "Via this endpoint, photos that the customer has uploaded before accepting their quote can be fetched using the ‘id’ as a parameter.\r\nThe photo IDs can be obtained via the endpoint api/quotes. Please check the required parameter(s) listed below to make a successful call.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "header",
+            "description": "The requested API version",
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "default": "1.0"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/webhook": {
+      "post": {
+        "tags": [
+          "Webhook"
+        ],
+        "summary": "Create webhook",
+        "description": "Via this endpoint, you can create a webhook that will be called when a quote is accepted.\r\nThe webhook will be called with a POST request and the body will contain a JSON object with the following properties:\r\n- quoteId: the id of the quote that was accepted\r\n- photoIds: the ids of the photos that were uploaded.",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "header",
+            "description": "The requested API version",
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "default": "1.0"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebhookDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebhookDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebhookDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Webhook"
+        ],
+        "summary": "Get webhook",
+        "description": "Via this endpoint, you can get the activated webhook.",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "header",
+            "description": "The requested API version",
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "default": "1.0"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/webhook/{id}/deactivate": {
+      "post": {
+        "tags": [
+          "Webhook"
+        ],
+        "summary": "Deactivate webhook",
+        "description": "Via this endpoint, you can deactivate the active webhook. This means that the webhook will no longer be called when a quote is accepted.\r\nnote: you can not activate a deactivated webhook. If you want to activate a webhook, you need to create a new one.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the webhook to be deactivated.",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "header",
+            "description": "The requested API version",
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "default": "1.0"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddressDto": {
+        "type": "object",
+        "properties": {
+          "zipCode": {
+            "maxLength": 7,
+            "type": "string",
+            "nullable": true
+          },
+          "houseNumber": {
+            "maxLength": 5,
+            "type": "integer",
+            "format": "int32"
+          },
+          "houseNumberAddition": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "street": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AnnualEnergyUsageDto": {
+        "type": "object",
+        "properties": {
+          "normalElectricityUsage": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "lowElectricityUsage": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "gasUsage": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "cityHeatingUsage": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticationType": {
+        "enum": [
+          "None",
+          "ApiKey"
+        ],
+        "type": "string"
+      },
+      "BathType": {
+        "enum": [
+          "Onbekend",
+          "Douche",
+          "Bad",
+          "Douche en bad",
+          "Luxebad"
+        ],
+        "type": "string"
+      },
+      "BuildingDto": {
+        "type": "object",
+        "properties": {
+          "buildingType": {
+            "$ref": "#/components/schemas/BuildingType"
+          },
+          "constructionYear": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isProtectedArea": {
+            "type": "boolean",
+            "description": "Whether the house is in a protected city scape",
+            "nullable": true
+          },
+          "floorArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "energyLabel": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BuildingType": {
+        "enum": [
+          "Onbekend",
+          "Tussenwoning",
+          "Hoekwoning",
+          "Twee-onder-een-kap woning",
+          "Vrijstaande woning",
+          "Appartement",
+          "Bedrijfspand"
+        ],
+        "type": "string"
+      },
+      "CampaignDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "discountPercentageToApply": {
+            "type": "number",
+            "description": "The discount percentage that needs to be applied to the final quote.",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CavityWallInsulationProductDto": {
+        "type": "object",
+        "properties": {
+          "insulationArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommentDto": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "Any information that might be relevant for the installation",
+            "nullable": true
+          },
+          "source": {
+            "type": "string",
+            "description": "Who provides the information",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ContactDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "emailAddress": {
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "maxLength": 13,
+            "minLength": 10,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateWebhookDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "This is the URL of the installer system that HomeQgo will use this URL to make HTTP POST requests when the new quote status change to accepted.",
+            "nullable": true
+          },
+          "apiKey": {
+            "type": "string",
+            "description": "This is a secret key provided by the installer, used for authentication or identification purposes when HomeQgo calls installer webhook URL.\r\nIt ensures that the request comes from a trusted source.",
+            "nullable": true
+          },
+          "authenticationType": {
+            "$ref": "#/components/schemas/AuthenticationType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorResult"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ErrorResult": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FloorInsulationProductDto": {
+        "type": "object",
+        "properties": {
+          "insulationArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "hasCrawlSpace": {
+            "type": "boolean",
+            "description": "Whether there is crawl space under the house",
+            "nullable": true
+          },
+          "crawlSpaceHeightCentimeters": {
+            "type": "integer",
+            "description": "Height in centimeters of the crawl space under the house",
+            "format": "int32",
+            "nullable": true
+          },
+          "groundFloorType": {
+            "$ref": "#/components/schemas/FloorType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FloorType": {
+        "enum": [
+          "Ik weet dit (nog) niet",
+          "Beton",
+          "Hout",
+          "Broodjesvloer",
+          "Kwaaitaalvloer"
+        ],
+        "type": "string"
+      },
+      "GlassProductDto": {
+        "type": "object",
+        "properties": {
+          "windows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GlassProductWindowDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GlassProductWindowDto": {
+        "type": "object",
+        "properties": {
+          "widthCentimeters": {
+            "type": "integer",
+            "description": "Width of window in centimeters (excluding frame)",
+            "format": "int32",
+            "nullable": true
+          },
+          "heightCentimeters": {
+            "type": "integer",
+            "description": "Width of window in centimeters (excluding frame)",
+            "format": "int32",
+            "nullable": true
+          },
+          "sillType": {
+            "$ref": "#/components/schemas/WindowSillType"
+          },
+          "currentGlassType": {
+            "$ref": "#/components/schemas/InstalledGlassType"
+          },
+          "floorIndex": {
+            "type": "integer",
+            "description": "The floor the window is placed. 0 is ground level",
+            "format": "int32",
+            "nullable": true
+          },
+          "roomName": {
+            "type": "string",
+            "description": "Optional name of the room the window resides",
+            "nullable": true
+          },
+          "remarks": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "HeatDistributionSystem": {
+        "enum": [
+          "Onbekend",
+          "Radiator",
+          "Lage temperatuur verwarming",
+          "Radiatoren en lage temperatuur verwarming"
+        ],
+        "type": "string"
+      },
+      "HeatGenerationSystem": {
+        "enum": [
+          "Ketel",
+          "Stadsverwarming",
+          "Warmtepomp",
+          "Brandstof centrale verwarming",
+          "All-electric warmtepomp",
+          "Ventilatiewarmtepomp",
+          "Onbekend"
+        ],
+        "type": "string"
+      },
+      "HeatpumpProductDto": {
+        "type": "object",
+        "properties": {
+          "powerConsumptionInWatts": {
+            "type": "number",
+            "format": "double"
+          },
+          "heatDistributionSystem": {
+            "$ref": "#/components/schemas/HeatDistributionSystem"
+          },
+          "spaceHeatGenerationSystem": {
+            "$ref": "#/components/schemas/HeatGenerationSystem"
+          },
+          "hotWaterGenerationSystem": {
+            "$ref": "#/components/schemas/HeatGenerationSystem"
+          },
+          "bathType": {
+            "$ref": "#/components/schemas/BathType"
+          },
+          "ventilationType": {
+            "$ref": "#/components/schemas/VentilationType"
+          },
+          "boilerProductionYear": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "haveToReplaceBoiler": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "hasCrawlSpace": {
+            "type": "boolean",
+            "description": "Whether there is crawl space under the house",
+            "nullable": true
+          },
+          "crawlSpaceHeightCentimeters": {
+            "type": "integer",
+            "description": "Height in centimeters of the crawl space under the house",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "InstallationPlannedRequest": {
+        "required": [
+          "id",
+          "InstallationDate"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Id is a client-generated token used to uniquely identify a specific request.\r\nIts uniqueness is essential for preventing the processing of duplicate requests.",
+            "format": "uuid"
+          },
+          "InstallationDate": {
+            "type": "string",
+            "description": "This is the date that the installation is planned for. The correct format for this property is [yyyy-mm-ddThh:mm:ss]. Ensure that the datetime value assigned here is in UTC format.",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InstalledGlassType": {
+        "enum": [
+          "Enkel",
+          "Dubbel",
+          "Figuurglas",
+          "Glas in lood"
+        ],
+        "type": "string"
+      },
+      "InstallerQuote": {
+        "type": "object",
+        "properties": {
+          "quoteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/InstallerQuoteStatus"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InstallerQuoteStatus": {
+        "enum": [
+          "Geïnstalleerd",
+          "Afgewezen door installateur",
+          "Geaccepteerd bij Installateur",
+          "Installatie Gepland"
+        ],
+        "type": "string"
+      },
+      "InstallerQuoteStatusResponse": {
+        "type": "object",
+        "properties": {
+          "quoteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/QuoteStatus"
+          },
+          "messageId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InverterSetup": {
+        "enum": [
+          "Enkele MPP-tracker",
+          "Dubbelle MPP-tracker",
+          "Power-optimizers",
+          "Micro-omvormer"
+        ],
+        "type": "string"
+      },
+      "MeasurementUnitType": {
+        "enum": [
+          "Count",
+          "SquareMeter",
+          "Meter"
+        ],
+        "type": "string"
+      },
+      "PersonalSituationDto": {
+        "type": "object",
+        "properties": {
+          "budget": {
+            "type": "number",
+            "description": "Available budget provided by the customer",
+            "format": "double",
+            "nullable": true
+          },
+          "isOwner": {
+            "type": "boolean",
+            "description": "Whether the customer owns the house",
+            "nullable": true
+          },
+          "inhabitantCount": {
+            "type": "integer",
+            "description": "Amount of people living in the house",
+            "format": "int32",
+            "nullable": true
+          },
+          "annualEnergyUsage": {
+            "$ref": "#/components/schemas/AnnualEnergyUsageDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PhotoDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "stringId": {
+            "type": "string",
+            "nullable": true
+          },
+          "localId": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PricingDto": {
+        "type": "object",
+        "properties": {
+          "subsidy": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "priceExclVat": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "priceInclVat": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "priceInclVatSubsidy": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "ProductConfigurationDto": {
+        "type": "object",
+        "properties": {
+          "productGroup": {
+            "$ref": "#/components/schemas/ProductGroup"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the product in the quote (e.g. Longi 430 Enphase, Knauf, ThermoEPS)",
+            "nullable": true
+          },
+          "commentsForInstallationPartner": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentDto"
+            },
+            "description": "Optional field with comments that may help in the installation",
+            "nullable": true
+          },
+          "quantity": {
+            "$ref": "#/components/schemas/QuantityDto"
+          },
+          "cavityWallInsulation": {
+            "$ref": "#/components/schemas/CavityWallInsulationProductDto"
+          },
+          "floorInsulation": {
+            "$ref": "#/components/schemas/FloorInsulationProductDto"
+          },
+          "glass": {
+            "$ref": "#/components/schemas/GlassProductDto"
+          },
+          "heatpump": {
+            "$ref": "#/components/schemas/HeatpumpProductDto"
+          },
+          "roofInsulation": {
+            "$ref": "#/components/schemas/RoofInsulationProductDto"
+          },
+          "solarPanel": {
+            "$ref": "#/components/schemas/SolarPanelProductDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductGroup": {
+        "enum": [
+          "Onbekend",
+          "Zonnepanelen",
+          "Zonneboiler",
+          "Dakisolatie",
+          "Spouwmuurisolatie",
+          "Vloerisolatie",
+          "HR++ glas",
+          "Warmtepomp",
+          "HR-ketel",
+          "LT-verwarming",
+          "Buitengevelisolatie",
+          "Vloerverwarming",
+          "Warmtepomp met HR-ketel",
+          "Ventilatiewarmtepomp",
+          "All-electric warmtepomp",
+          "Kleine producten"
+        ],
+        "type": "string"
+      },
+      "QuantityDto": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "measurementUnitType": {
+            "$ref": "#/components/schemas/MeasurementUnitType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "QuoteAcceptedAtInstallerRequest": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Id is a client-generated token used to uniquely identify a specific request.\r\nIts uniqueness is essential for preventing the processing of duplicate requests.",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "QuoteDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "stringId": {
+            "type": "string",
+            "nullable": true
+          },
+          "localId": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "acceptedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "contact": {
+            "$ref": "#/components/schemas/ContactDto"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressDto"
+          },
+          "building": {
+            "$ref": "#/components/schemas/BuildingDto"
+          },
+          "personalSituation": {
+            "$ref": "#/components/schemas/PersonalSituationDto"
+          },
+          "pricing": {
+            "$ref": "#/components/schemas/PricingDto"
+          },
+          "campaign": {
+            "$ref": "#/components/schemas/CampaignDto"
+          },
+          "productConfiguration": {
+            "$ref": "#/components/schemas/ProductConfigurationDto"
+          },
+          "photos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhotoDto"
+            },
+            "nullable": true
+          },
+          "trafficPartnerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "installationPartnerName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "QuoteInstalledRequest": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Id is a client-generated token used to uniquely identify a specific request.\r\nIts uniqueness is essential for preventing the processing of duplicate requests.",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "QuoteRejectedRequest": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Id is a client-generated token used to uniquely identify a specific request.\r\nIts uniqueness is essential for preventing the processing of duplicate requests.",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "QuoteStatus": {
+        "enum": [
+          "Aangemaakt",
+          "Geaccepteerd",
+          "Afgewezen door klant",
+          "Afgewezen door adviseur",
+          "Verlopen",
+          "Geïnstalleerd",
+          "Afgewezen door installateur",
+          "Geaccepteerd bij Installateur",
+          "Installatie Gepland"
+        ],
+        "type": "string"
+      },
+      "RoofFinishingType": {
+        "enum": [
+          "Geen",
+          "Witte panelen"
+        ],
+        "type": "string"
+      },
+      "RoofInsulationProductDto": {
+        "type": "object",
+        "properties": {
+          "roofs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoofInsulationProductRoofDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RoofInsulationProductRoofDto": {
+        "type": "object",
+        "properties": {
+          "roofType": {
+            "$ref": "#/components/schemas/RoofType"
+          },
+          "roofFinishingType": {
+            "$ref": "#/components/schemas/RoofFinishingType"
+          },
+          "insulationArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RoofOrientation": {
+        "enum": [
+          "Noord",
+          "Noordoost",
+          "Oost",
+          "Zuidoost",
+          "Zuid",
+          "Zuidwest",
+          "West",
+          "Noordwest"
+        ],
+        "type": "string"
+      },
+      "RoofType": {
+        "enum": [
+          "Schuin",
+          "Plat",
+          "Dakkapel",
+          "Schoorsteen"
+        ],
+        "type": "string"
+      },
+      "RoofingType": {
+        "enum": [
+          "Unknown",
+          "Tiles",
+          "Bitumen",
+          "Epdm",
+          "Slates",
+          "Mastic",
+          "PVC",
+          "Reed",
+          "SandwichPanels",
+          "Shingles",
+          "Steel",
+          "Sheets",
+          "Zink",
+          "Other"
+        ],
+        "type": "string"
+      },
+      "SolarPanelProductDto": {
+        "type": "object",
+        "properties": {
+          "inverterSetup": {
+            "$ref": "#/components/schemas/InverterSetup"
+          },
+          "roofs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SolarPanelProductRoofDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SolarPanelProductRoofDto": {
+        "type": "object",
+        "properties": {
+          "roofType": {
+            "$ref": "#/components/schemas/RoofType"
+          },
+          "roofOrientation": {
+            "$ref": "#/components/schemas/RoofOrientation"
+          },
+          "roofingType": {
+            "$ref": "#/components/schemas/RoofingType"
+          },
+          "panelCount": {
+            "type": "integer",
+            "description": "Amount of solar panels on the roof",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "VentilationType": {
+        "enum": [
+          "Onbekend",
+          "Natuurlijke ventilatie",
+          "Mechanische ventilatie",
+          "Gebalanceerde ventilatie"
+        ],
+        "type": "string"
+      },
+      "WebhookDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "webhook unique identifier.",
+            "format": "uuid"
+          },
+          "url": {
+            "type": "string",
+            "description": "This is the URL of the installer system that HomeQgo will use this URL to make HTTP POST requests when the new quote status change to accepted.",
+            "nullable": true
+          },
+          "apiKey": {
+            "type": "string",
+            "description": "This is a secret key provided by the installer, used for authentication or identification purposes when HomeQgo calls installer webhook URL.\r\nIt ensures that the request comes from a trusted source.",
+            "nullable": true
+          },
+          "authenticationType": {
+            "$ref": "#/components/schemas/AuthenticationType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WindowSillType": {
+        "enum": [
+          "Hout",
+          "Kunststof",
+          "Aluminium"
+        ],
+        "type": "string"
+      }
+    }
+  }
+}
